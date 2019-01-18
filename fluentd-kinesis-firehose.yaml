@@ -1,0 +1,75 @@
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: fluentd
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-logging
+    version: v1
+    kubernetes.io/cluster-service: "true"
+spec:
+  template:
+    metadata:
+      labels:
+        k8s-app: fluentd-logging
+        version: v1
+        kubernetes.io/cluster-service: "true"
+    spec:
+      serviceAccount: fluentd
+      serviceAccountName: fluentd
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: fluentd
+        image: fluent/fluentd-kubernetes-daemonset:v0.12-debian-kinesis
+        env:
+          - name:  FLUENT_KINESIS_STREAMS_REGION
+            value: "eu-west-1"
+          - name:  FLUENT_KINESIS_DELIVERY_STREAM_NAME
+            value: "cxcloud"
+          - name:  FLUENT_KINESIS_STREAMS_INCLUDE_TIME_KEY
+            value: "true"
+          - name: FLUENT_BUFFER_CHUNK_LIMIT_SIZE
+            value: "32M"
+          - name: FLUENT_BUFFER_QUEUE_LIMIT_LENGTH
+            value: "320"
+          - name: FLUENT_UID
+            value: "0"
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        - name: fluentd-config
+          mountPath: /fluentd/etc/fluent.conf
+          subPath: fluent.conf
+          readOnly: true
+        - name: parse-json
+          mountPath: /fluentd/etc/conf.d/parse-json.conf
+          subPath: parse-json.conf
+          readOnly: true
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
+      - name: fluentd-config
+        configMap:
+          defaultMode: 0644
+          name: fluentd-config
+      - name: parse-json
+        configMap:
+          defaultMode: 0644
+          name: parse-json
