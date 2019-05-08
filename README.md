@@ -50,7 +50,7 @@ The following table list the configurable parameters of the chart and their defa
 | fluentEnvs.kinesisStreamName | Kinesis stream name | cxcloud |
 | fluentEnvs.kinesisIncludeTimeKey | Include time key | true |
 | fluentEnvs.bufferChunkLimitSize | Buffer chunk limit size | 2M |
-| fluentEnvs.bufferQueueLimitLength | buffer queue limit length | 32 |
+| fluentEnvs.bufferQueueLimitLength | Buffer queue limit length | 32 |
 | fluentConf | fluent.conf content | Not set |
 | systemdConf | systemd.conf content | Not set |
 | kubernetesConf | kubernetes.conf content | Not set |
@@ -93,3 +93,7 @@ The Docker image itself contains a pre-configured configuration, [systemd.conf](
 ### parse-json.conf
 
 Kubernetes log stdout from all the containers into log files. These log files contain JSON strings containing the container log line in a "log" attribute. In case the container log is already in JSON formant the [parse-json.conf](https://github.com/cxcloud/helm-fluentd-kinesis-firehose/blob/master/templates/parse-json.yaml) will parse the json object into own key/value pairs. This is useful for example if Elasticsearch is used as a data source for Kinesis Firehose.
+
+## License
+
+MIT © [CXCloud](https://docs.cxcloud.com)
