@@ -1,0 +1,105 @@
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: {{ include "helm-fluentd-kinesis-firehose.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "helm-fluentd-kinesis-firehose.name" . }}
+    helm.sh/chart: {{ include "helm-fluentd-kinesis-firehose.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    k8s-app: fluentd-logging
+    version: v1
+    kubernetes.io/cluster-service: "true"
+spec:
+  template:
+    metadata:
+      labels:
+        k8s-app: fluentd-logging
+        version: v1
+        kubernetes.io/cluster-service: "true"
+    spec:
+      serviceAccount: {{ include "helm-fluentd-kinesis-firehose.fullname" . }}
+      serviceAccountName: {{ include "helm-fluentd-kinesis-firehose.fullname" . }}
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+{{- if .Values.fluentEnvs.assumeRole }}
+          - name:  ROLE_ARN
+            value: "{{ .Values.fluentEnvs.roleARN }}"
+          - name:  ROLE_SESSION_NAME
+            value: "{{ .Values.fluentEnvs.roleSession }}"
+{{- end}}
+          - name:  FLUENT_KINESIS_STREAMS_REGION
+            value: "{{ .Values.fluentEnvs.kinesisRegion }}"
+          - name:  FLUENT_KINESIS_DELIVERY_STREAM_NAME
+            value: "{{ .Values.fluentEnvs.kinesisStreamName }}"
+          - name:  FLUENT_KINESIS_STREAMS_INCLUDE_TIME_KEY
+            value: "{{ .Values.fluentEnvs.kinesisIncludeTimeKey }}"
+          - name:  FLUENT_BUFFER_CHUNK_LIMIT_SIZE
+            value: "{{ .Values.fluentEnvs.bufferChunkLimitSize }}"
+          - name:  FLUENT_BUFFER_QUEUE_LIMIT_LENGTH
+            value: "{{ .Values.fluentEnvs.bufferQueueLimitLength }}"
+          - name:  FLUENT_UID
+            value: "0"
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        - name: fluentd-config
+          mountPath: /fluentd/etc/fluent.conf
+          subPath: fluent.conf
+          readOnly: true
+{{- if .Values.systemdConf }}
+        - name: systemd-config
+          mountPath: /fluentd/etc/systemd.conf
+          subPath: systemd.conf
+          readOnly: true
+{{- end}}
+{{- if .Values.kubernetesConf }}
+        - name: kubernetes-config
+          mountPath: /fluentd/etc/kubernetes.conf
+          subPath: kubernetes.conf
+          readOnly: true
+{{- end}}
+        - name: parse-json
+          mountPath: /fluentd/etc/conf.d/parse-json.conf
+          subPath: parse-json.conf
+          readOnly: true
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
+      - name: fluentd-config
+        configMap:
+          defaultMode: 0644
+          name: fluentd-config
+{{- if .Values.systemdConf }}
+      - name: systemd-config
+        configMap:
+          defaultMode: 0644
+          name: systemd-config
+{{- end}}
+{{- if .Values.kubernetesConf }}
+      - name: kubernetes-config
+        configMap:
+          defaultMode: 0644
+          name: kubernetes-config
+{{- end}}
+      - name: parse-json
+        configMap:
+          defaultMode: 0644
+          name: parse-json

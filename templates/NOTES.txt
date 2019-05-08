@@ -1,0 +1,1 @@
+Fluentd deployed as daemon set

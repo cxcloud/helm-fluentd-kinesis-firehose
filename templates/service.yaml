@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "helm-fluentd-kinesis-firehose.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "helm-fluentd-kinesis-firehose.name" . }}
+    helm.sh/chart: {{ include "helm-fluentd-kinesis-firehose.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
