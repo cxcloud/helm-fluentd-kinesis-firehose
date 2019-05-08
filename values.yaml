@@ -11,15 +11,38 @@ nameOverride: ""
 fullnameOverride: ""
 
 fluentEnvs:
-  useRole: false
-  roleARN:
-  roleSession:
+  assumeRole: false
+  roleARN: ""
+  roleSession: ""
   kinesisRegion: "eu-west-1"
   kinesisStreamName: "cxcloud"
   kinesisIncludeTimeKey: "true"
   bufferChunkLimitSize: "2M"
   bufferQueueLimitLength: "32"
-  fluentUID: "0"
+
+# The configuration files can be overrided by adding the variables,
+# fluentConf, kubernetesConf and systemdConf. kubernetesConf Example:
+#
+# fluentConf : ""
+# systemdConf: ""
+# kubernetesConf: |-
+#   <match fluent.**>
+#     @type null
+#   </match>
+#   <source>
+#     @type tail
+#     @id in_tail_container_logs
+#     path /var/log/containers/*.log
+#     pos_file /var/log/fluentd-containers.log.pos
+#     tag kubernetes.*
+#     read_from_head true
+#     format json
+#     time_format %Y-%m-%dT%H:%M:%S.%NZ
+#   </source>
+#   <filter kubernetes.**>
+#     @type kubernetes_metadata
+#     @id filter_kube_metadata
+#   </filter>
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

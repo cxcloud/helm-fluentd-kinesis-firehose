@@ -1,15 +1,15 @@
-{{- if .Values.kubernetesConf }}
+{{- if .Values.systemdConf }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: kubernetes-config
+  name: systemd-config
   labels:
     app.kubernetes.io/name: {{ include "helm-fluentd-kinesis-firehose.name" . }}
     helm.sh/chart: {{ include "helm-fluentd-kinesis-firehose.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
-  kubernetes.conf: |-
-    {{ .Values.kubernetesConf | nindent 4 }}
+  systemd.conf: |-
+    {{ .Values.systemdConf | nindent 4 }}
 {{- end}}

@@ -29,7 +29,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
-{{- if .Values.fluentEnvs.useRole }}
+{{- if .Values.fluentEnvs.assumeRole }}
           - name:  ROLE_ARN
             value: "{{ .Values.fluentEnvs.roleARN }}"
           - name:  ROLE_SESSION_NAME
@@ -46,7 +46,7 @@ spec:
           - name:  FLUENT_BUFFER_QUEUE_LIMIT_LENGTH
             value: "{{ .Values.fluentEnvs.bufferQueueLimitLength }}"
           - name:  FLUENT_UID
-            value: "{{ .Values.fluentEnvs.fluentUID }}"
+            value: "0"
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         volumeMounts:
@@ -59,10 +59,18 @@ spec:
           mountPath: /fluentd/etc/fluent.conf
           subPath: fluent.conf
           readOnly: true
+{{- if .Values.systemdConf }}
+        - name: systemd-config
+          mountPath: /fluentd/etc/systemd.conf
+          subPath: systemd.conf
+          readOnly: true
+{{- end}}
+{{- if .Values.kubernetesConf }}
         - name: kubernetes-config
           mountPath: /fluentd/etc/kubernetes.conf
           subPath: kubernetes.conf
           readOnly: true
+{{- end}}
         - name: parse-json
           mountPath: /fluentd/etc/conf.d/parse-json.conf
           subPath: parse-json.conf
@@ -79,10 +87,18 @@ spec:
         configMap:
           defaultMode: 0644
           name: fluentd-config
+{{- if .Values.systemdConf }}
+      - name: systemd-config
+        configMap:
+          defaultMode: 0644
+          name: systemd-config
+{{- end}}
+{{- if .Values.kubernetesConf }}
       - name: kubernetes-config
         configMap:
           defaultMode: 0644
           name: kubernetes-config
+{{- end}}
       - name: parse-json
         configMap:
           defaultMode: 0644

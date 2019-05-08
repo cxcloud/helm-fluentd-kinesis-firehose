@@ -10,6 +10,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
   fluent.conf: |-
+{{- if .Values.fluentConf }}
+    {{ .Values.fluentConf | nindent 4 }}
+{{ else }}
     @include systemd.conf
     @include kubernetes.conf
     @include conf.d/*.conf
@@ -25,10 +28,11 @@ data:
       try_flush_interval "#{ENV['FLUENT_TRY_FLUSH_INTERVAL'] || '0.1'}"
       queued_chunk_flush_interval "#{ENV['FLUENT_QUEUED_CHUNK_FLUSH_INTERVAL'] || '0.01'}"
       num_threads "#{ENV['FLUENT_BUFFER_FLUSH_THREAD_COUNT'] || '15'}"
-{{- if .Values.fluentEnvs.useRole }}
+  {{- if .Values.fluentEnvs.useRole }}
       <assume_role_credentials>
         role_arn "#{ENV['ROLE_ARN']}"
         role_session_name "#{ENV['ROLE_SESSION_NAME']}"
       </assume_role_credentials>
-{{- end}}
+  {{- end}}
     </match>
+{{- end}}
