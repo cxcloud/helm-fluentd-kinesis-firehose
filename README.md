@@ -6,7 +6,7 @@ Fluentd Kinesis Firehose Helm Chart creates a Kubernetes DaemonSet and stream th
 
 ### Requirements
 
-The Fluentd kinesis Firehose daemonset requires that an AWS account has already been provisioned with a Kinesis Firehose stream and with its data stores (eg. Amazon S3 bucket, Amazon Elasticsearch Service, etc).
+The Fluentd kinesis Firehose daemonset requires that an AWS account has already been provisioned with a Kinesis Firehose stream and with its data stores (eg. Amazon S3 bucket, Amazon Elasticsearch Service, etc). Available is a CX Cloud provided Terraform module, [terraform-kinesis-firehose-elasticsearch](https://github.com/cxcloud/terraform-kinesis-firehose-elasticsearch) for helping with the installation.
 
 Additionally there should already be a running Kubernetes cluster.
 
