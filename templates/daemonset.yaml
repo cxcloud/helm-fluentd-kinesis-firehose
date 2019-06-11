@@ -18,6 +18,11 @@ spec:
         k8s-app: fluentd-logging
         version: v1
         kubernetes.io/cluster-service: "true"
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/fluent-conf.yaml") . | sha256sum }}
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
     spec:
       serviceAccount: {{ include "helm-fluentd-kinesis-firehose.fullname" . }}
       serviceAccountName: {{ include "helm-fluentd-kinesis-firehose.fullname" . }}
