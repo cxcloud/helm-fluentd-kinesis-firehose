@@ -18,6 +18,11 @@ spec:
         k8s-app: fluentd-logging
         version: v1
         kubernetes.io/cluster-service: "true"
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/fluent-conf.yaml") . | sha256sum }}
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
     spec:
       serviceAccount: {{ include "helm-fluentd-kinesis-firehose.fullname" . }}
       serviceAccountName: {{ include "helm-fluentd-kinesis-firehose.fullname" . }}
@@ -34,6 +39,12 @@ spec:
             value: "{{ .Values.fluentEnvs.roleARN }}"
           - name:  ROLE_SESSION_NAME
             value: "{{ .Values.fluentEnvs.roleSession }}"
+{{- end}}
+{{- if .Values.fluentEnvs.instanceProfileCredentials }}
+          - name:  INSTANCE_PROFILE_IP_ADDRESS
+            value: "{{ .Values.fluentEnvs.instanceProfileIPAddress }}"
+          - name:  INSTANCE_PROFILE_PORT
+            value: "{{ .Values.fluentEnvs.instanceProfilePort }}"
 {{- end}}
           - name:  FLUENT_KINESIS_STREAMS_REGION
             value: "{{ .Values.fluentEnvs.kinesisRegion }}"

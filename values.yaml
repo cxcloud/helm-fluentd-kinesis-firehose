@@ -19,6 +19,11 @@ fluentEnvs:
   kinesisIncludeTimeKey: "true"
   bufferChunkLimitSize: "2M"
   bufferQueueLimitLength: "32"
+  instanceProfileCredentials: false
+  instanceProfileIPAddress: "169.254.169.254"
+  instanceProfilePort: "80"
+
+podAnnotations: {}
 
 # The configuration files can be overrided by adding the variables,
 # fluentConf, kubernetesConf and systemdConf. kubernetesConf Example:

@@ -56,7 +56,10 @@ The following table list the configurable parameters of the chart and their defa
 | kubernetesConf | kubernetes.conf content | Not set |
 | resources | Resources allocation (Requests and Limits) | {} |
 | rbac.create | Whether RBAC resources are created | true |
-
+| instanceProfileCredentials | AWS instance profile credentials | false |
+| instanceProfileIPAddress | IP Address to get instance profile credentials | 169.254.169.254 |
+| instanceProfilePort | Port to get instance profile credentials | 80 |
+| podAnnotations | Annotations | {} |
 ### Overriding configurations
 
 Parameters can be overridden when installing the chart. For example assuming an IAM role for another AWS account were Kinesis Firehose is running:
