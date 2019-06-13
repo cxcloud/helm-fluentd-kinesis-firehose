@@ -34,7 +34,7 @@ data:
         role_session_name "#{ENV['ROLE_SESSION_NAME']}"
       </assume_role_credentials>
   {{- end}}
-    {{- if .Values.fluentEnvs.instanceProfileCredentials }}
+  {{- if .Values.fluentEnvs.instanceProfileCredentials }}
       <instance_profile_credentials>
         ip_address "#{ENV['INSTANCE_PROFILE_IP_ADDRESS']}"
         port "#{ENV['INSTANCE_PROFILE_PORT']}"

@@ -60,6 +60,7 @@ The following table list the configurable parameters of the chart and their defa
 | instanceProfileIPAddress | IP Address to get instance profile credentials | 169.254.169.254 |
 | instanceProfilePort | Port to get instance profile credentials | 80 |
 | podAnnotations | Annotations | {} |
+
 ### Overriding configurations
 
 Parameters can be overridden when installing the chart. For example assuming an IAM role for another AWS account were Kinesis Firehose is running:
