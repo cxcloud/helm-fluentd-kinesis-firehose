@@ -12,16 +12,25 @@ Additionally there should already be a running Kubernetes cluster.
 
 ### Installing the chart
 
-Clone the repository:
+Add the repository:
 
 ```bash
-git clone git@github.com:cxcloud/helm-fluentd-kinesis-firehose.git
+helm repo add cxcloud-fluentd https://raw.githubusercontent.com/cxcloud/helm-fluentd-kinesis-firehose/master
+```
+
+Update repositories:
+
+```bash
+helm repo update
 ```
 
 To install the chart with the release name `my-release` into the namespace `kube-system`:
 
 ```bash
-helm install helm-fluentd-kinesis-firehose --name my-release --namespace kube-system
+helm install cxcloud-fluentd/helm-fluentd-kinesis-firehose \
+  --version 0.1.0 \
+  --name my-release \
+  --namespace kube-system
 ```
 
 ### Uninstalling the Chart

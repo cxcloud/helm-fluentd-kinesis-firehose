@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  helm-fluentd-kinesis-firehose:
+    - apiVersion: v1
+      appVersion: "1.0"
+      created: 2019-09-17T18:01:32.141731+03:00
+      description: A Helm chart for Fluentd Kinesis Firehose
+      digest: d7133757cfefdd8219aaadffdd518166947b47b31e2cb71f2eef6111e1ee653d
+      name: helm-fluentd-kinesis-firehose
+      urls:
+        - https://github.com/cxcloud/helm-fluentd-kinesis-firehose/archive/v0.1.0.tar.gz
+      version: 0.1.0
+generated: 2019-09-17T18:01:32.140464+03:00
