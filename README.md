@@ -24,7 +24,7 @@ Update repositories:
 helm repo update
 ```
 
-To install the chart with the release name `my-release` into the namespace `kube-system`:
+To install the chart with version `0.1.0` and release name `my-release` into the namespace `kube-system`:
 
 ```bash
 helm install cxcloud-fluentd/helm-fluentd-kinesis-firehose \
@@ -75,7 +75,9 @@ The following table list the configurable parameters of the chart and their defa
 Parameters can be overridden when installing the chart. For example assuming an IAM role for another AWS account were Kinesis Firehose is running:
 
 ```bash
-helm install helm-fluentd-kinesis-firehose --name my-release --namespace kube-system \
+helm install cxcloud-fluentd/helm-fluentd-kinesis-firehose \
+  --name my-release \
+  --namespace kube-system \
   --set fluentEnvs.useRole=true \
   --set fluentEnvs.roleARN=arn:aws:iam::012345678901:role/KinesisFirehose \
   --set fluentEnvs.roleSession=kops-nodes
@@ -84,7 +86,10 @@ helm install helm-fluentd-kinesis-firehose --name my-release --namespace kube-sy
 Alternatively, a YAML file ([values.yaml](values.yaml)) that specifies the values for the parameters can be provided while installing the chart:
 
 ```bash
-helm install helm-fluentd-kinesis-firehose --name my-release --namespace kube-system -f values.yaml
+helm install cxcloud-fluentd/helm-fluentd-kinesis-firehose \
+  --name my-release \
+  --namespace kube-system \
+  -f values.yaml
 ```
 
 ## Fluentd DaemonSet
