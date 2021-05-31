@@ -52,6 +52,7 @@ The following table list the configurable parameters of the chart and their defa
 | image.pullPolicy | Image pull policy | IfNotPresent |
 | nameOverride | Override the name for resources | Empty string |
 | fullnameOverride | Override the full name for resources | Empty string |
+| fluentEnvs.webTdentityTokenAuthentication | Should Fluentd assume IAM role using WebIdentityToken | false |
 | fluentEnvs.assumeRole | Should Fluentd assume IAM role for accessing Kinesis | false |
 | fluentEnvs.roleARN | AWS IAM role | Empty string |
 | fluentEnvs.roleSession | Role session | Empty string |
